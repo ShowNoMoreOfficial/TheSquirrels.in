@@ -1,7 +1,14 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  images: {
+    remotePatterns: [
+      // Gather-hosted cover & inline images
+      { protocol: "https", hostname: "vritti.shownomore.com", pathname: "/api/files/**" },
+      // Author avatars (uploadthing)
+      { protocol: "https", hostname: "utfs.io", pathname: "/**" },
+    ],
+  },
 };
 
 export default nextConfig;
