@@ -27,7 +27,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!post) return { title: "Not Found" };
 
   const description = excerpt(post.content ?? "", 160);
-  const cover = gatherImageUrl(post.coverImage);
+  const cover = gatherImageUrl(post.coverImage, post.updatedAt);
   const tagNames = (post.tags ?? []).map((t) => t.name);
 
   return {
@@ -73,7 +73,7 @@ export default async function ArticlePage({ params }: Props) {
           sectionKey={section?.key}
           byline={byline(post)}
           date={post.createdAt}
-          coverImage={gatherImageUrl(post.coverImage)}
+          coverImage={gatherImageUrl(post.coverImage, post.updatedAt)}
         />
         <ArticleBody html={post.content ?? ""} />
       </article>

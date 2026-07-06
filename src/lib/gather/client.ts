@@ -8,6 +8,13 @@ import type {
 const API_URL = process.env.GATHER_API_URL || "https://vritti.shownomore.com";
 const API_KEY = process.env.GATHER_API_KEY || "";
 
+/**
+ * In development we always fetch live so CMS edits show up on localhost
+ * immediately. In production we use ISR + cache tags, refreshed on demand by
+ * the Gather webhook (see src/app/api/revalidate/route.ts).
+ */
+const LIVE_IN_DEV = process.env.NODE_ENV !== "production";
+
 type FetchOpts = {
   /** ISR revalidate window in seconds */
   revalidate?: number;
@@ -19,7 +26,9 @@ async function gatherFetch<T>(path: string, opts: FetchOpts = {}): Promise<T> {
   const { revalidate = 300, tags = [] } = opts;
   const res = await fetch(`${API_URL}${path}`, {
     headers: { Authorization: `Bearer ${API_KEY}` },
-    next: { revalidate, tags },
+    ...(LIVE_IN_DEV
+      ? { cache: "no-store" as const }
+      : { next: { revalidate, tags } }),
   });
 
   if (!res.ok) {

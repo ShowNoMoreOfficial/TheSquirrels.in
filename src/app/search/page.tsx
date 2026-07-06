@@ -25,7 +25,7 @@ export default async function SearchPage({ searchParams }: Props) {
             type="search"
             name="q"
             defaultValue={query}
-            placeholder="Search stories, people, topics…"
+            placeholder="Search Stories, People, Topics…"
             autoFocus
             className="w-full bg-transparent font-serif text-lg text-ink placeholder:text-ink-faint focus:outline-none"
           />
@@ -47,7 +47,7 @@ export default async function SearchPage({ searchParams }: Props) {
           </>
         ) : (
           <p className="font-serif italic text-ink-faint">
-            Enter a term to search the archive.
+            Enter a Term to Search the Archive.
           </p>
         )}
       </div>

@@ -29,7 +29,7 @@ function toStoryItem(post: GatherPost, section?: Section): StoryItem {
     sectionKey: section?.key,
     byline: byline(post),
     date: post.createdAt,
-    coverImage: gatherImageUrl(post.coverImage),
+    coverImage: gatherImageUrl(post.coverImage, post.updatedAt),
   };
 }
 

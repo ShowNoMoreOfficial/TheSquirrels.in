@@ -30,7 +30,7 @@ export function Footer() {
         </nav>
 
         <p className="mt-8 text-center text-[12px] text-ink-faint font-serif">
-          © {year} The Squirrels. An independent Indian news publication.
+          © {year} The Squirrels. An Independent Indian News Publication.
         </p>
       </Container>
     </footer>

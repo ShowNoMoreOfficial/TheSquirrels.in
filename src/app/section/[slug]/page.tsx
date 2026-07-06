@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Container } from "@/components/ui/Container";
-import { StoryList } from "@/components/news/StoryList";
+import { LeadStory } from "@/components/news/LeadStory";
+import { SectionStories } from "@/components/news/SectionStories";
 import { SECTIONS, getSectionByKey } from "@/lib/gather/sections";
 import { getSection } from "@/lib/gather/queries";
 
@@ -28,7 +29,15 @@ export default async function SectionPage({ params }: Props) {
   const section = getSectionByKey(slug);
   if (!section) notFound();
 
-  const { stories } = await getSection(section, 1, 18);
+  const { stories, hasMore } = await getSection(section, 1, 12);
+
+  // We're already on the section page, so drop the redundant per-card kicker.
+  const items = stories.map((s) => ({
+    ...s,
+    section: undefined,
+    sectionKey: undefined,
+  }));
+  const [lead, ...rest] = items;
 
   return (
     <Container className="py-8">
@@ -41,10 +50,25 @@ export default async function SectionPage({ params }: Props) {
         </p>
       </header>
 
-      <StoryList
-        stories={stories}
-        emptyMessage={`No ${section.label} stories yet.`}
-      />
+      {items.length === 0 ? (
+        <p className="py-10 font-serif italic text-ink-faint">
+          No {section.label} stories yet.
+        </p>
+      ) : (
+        <>
+          {/* Featured lead — newest article */}
+          <div className="mb-10 border-b-2 border-rule pb-10">
+            <LeadStory story={lead} />
+          </div>
+
+          {/* Remaining stories in an editorial grid, with Load More */}
+          <SectionStories
+            sectionKey={section.key}
+            initial={rest}
+            initialHasMore={hasMore}
+          />
+        </>
+      )}
     </Container>
   );
 }

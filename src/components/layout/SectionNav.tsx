@@ -10,7 +10,7 @@ export function SectionNav() {
   return (
     <nav className="sticky top-0 z-50 border-y border-hairline bg-paper/95 backdrop-blur supports-[backdrop-filter]:bg-paper/80">
       <div className="mx-auto w-full max-w-[1200px] px-4 sm:px-6">
-        <ul className="flex items-center gap-5 sm:gap-7 overflow-x-auto py-3 no-scrollbar">
+        <ul className="flex items-center justify-center gap-5 sm:gap-7 overflow-x-auto py-3 no-scrollbar">
           {SECTIONS.map((section) => {
             const href = `/section/${section.key}`;
             const active = pathname === href;
@@ -29,13 +29,26 @@ export function SectionNav() {
               </li>
             );
           })}
-          <li className="shrink-0 ml-auto">
+          <li className="shrink-0">
             <Link
               href="/search"
               aria-label="Search"
-              className="label text-[12px] text-ink-soft whitespace-nowrap transition-colors hover:text-link"
+              className="flex items-center text-ink-soft transition-colors hover:text-link"
             >
-              Search
+              <svg
+                width="15"
+                height="15"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden="true"
+              >
+                <circle cx="11" cy="11" r="7" />
+                <line x1="21" y1="21" x2="16.5" y2="16.5" />
+              </svg>
             </Link>
           </li>
         </ul>
