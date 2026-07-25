@@ -20,10 +20,10 @@ export function Masthead() {
         <div className="text-center">
           <Link href="/" className="inline-block">
             <Image
-              src="/brand/wordmark.png"
+              src="/brand/the-squirrels-copper.png"
               alt="The Squirrels"
-              width={1149}
-              height={369}
+              width={1145}
+              height={366}
               priority
               className="h-auto w-72 sm:w-[30rem]"
             />
