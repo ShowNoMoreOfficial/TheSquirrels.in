@@ -14,7 +14,7 @@ import type { GatherPost } from "@/lib/gather/types";
 /** The first article tag that matches one of our sections becomes its kicker. */
 function primarySection(post: GatherPost) {
   const names = new Set((post.tags ?? []).map((t) => t.name.toLowerCase()));
-  return SECTIONS.find((s) => names.has(s.label.toLowerCase()));
+  return SECTIONS.find((s) => s.tags.some((t) => names.has(t.toLowerCase())));
 }
 
 export const revalidate = 3600;

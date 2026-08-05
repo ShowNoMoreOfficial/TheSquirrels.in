@@ -68,7 +68,7 @@ async function getSectionStories(
   page = 1
 ): Promise<StoryItem[]> {
   const { data } = await listDocuments({
-    tag: section.label,
+    tag: section.tags.join(","),
     limit,
     page,
     sort: "createdAt",
