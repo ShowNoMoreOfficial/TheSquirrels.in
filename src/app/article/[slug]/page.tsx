@@ -9,6 +9,7 @@ import { excerpt } from "@/lib/content/excerpt";
 import { byline } from "@/lib/content/byline";
 import { gatherImageUrl } from "@/lib/content/images";
 import { SECTIONS } from "@/lib/gather/sections";
+import { ArticleJsonLd } from "@/components/seo/ArticleJsonLd";
 import type { GatherPost } from "@/lib/gather/types";
 
 /** The first article tag that matches one of our sections becomes its kicker. */
@@ -65,6 +66,16 @@ export default async function ArticlePage({ params }: Props) {
 
   return (
     <Container variant="measure" className="py-8 sm:py-10">
+      <ArticleJsonLd
+        slug={post.slug}
+        title={post.title}
+        description={excerpt(post.content ?? "", 160)}
+        image={gatherImageUrl(post.coverImage, post.updatedAt)}
+        authorName={post.author?.name ?? null}
+        section={section?.label}
+        datePublished={post.createdAt}
+        dateModified={post.updatedAt}
+      />
       <Link
         href="/"
         className="label mb-6 inline-block text-[11px] text-ink-soft hover:text-link"

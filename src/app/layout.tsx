@@ -4,6 +4,7 @@ import "./globals.css";
 import { Masthead } from "@/components/layout/Masthead";
 import { SectionNav } from "@/components/layout/SectionNav";
 import { Footer } from "@/components/layout/Footer";
+import { SITE_URL } from "@/lib/site";
 
 const playfair = Playfair_Display({
   variable: "--font-playfair",
@@ -27,7 +28,7 @@ const libreFranklin = Libre_Franklin({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://thesquirrels.in"),
+  metadataBase: new URL(SITE_URL),
   title: {
     default: "The Squirrels — Governance, Policy & Politics from India",
     template: "%s — The Squirrels",
