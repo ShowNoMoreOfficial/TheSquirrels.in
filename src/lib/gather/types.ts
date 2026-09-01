@@ -11,6 +11,15 @@ export interface GatherPost {
   parentSlug: string | null;
   author?: { name: string | null; image: string | null };
   tags?: { name: string; color: string }[];
+  /** Per-document SEO overrides set in the CMS; null fields fall back to auto. */
+  seo?: {
+    title: string | null;
+    description: string | null;
+    keywords: string | null;
+    canonicalUrl: string | null;
+    ogImage: string | null;
+    noIndex: boolean;
+  };
   createdAt: string;
   updatedAt: string;
 }

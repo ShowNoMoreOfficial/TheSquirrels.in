@@ -27,17 +27,27 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const post = await getArticle(slug);
   if (!post) return { title: "Not Found" };
 
-  const description = excerpt(post.content ?? "", 160);
-  const cover = gatherImageUrl(post.coverImage, post.updatedAt);
-  const tagNames = (post.tags ?? []).map((t) => t.name);
+  // Per-document SEO overrides from the CMS take precedence; blank → auto.
+  const seo = post.seo;
+  const metaTitle = seo?.title?.trim() || post.title;
+  const description = seo?.description?.trim() || excerpt(post.content ?? "", 160);
+  const cover =
+    (seo?.ogImage?.trim()
+      ? gatherImageUrl(seo.ogImage, post.updatedAt)
+      : gatherImageUrl(post.coverImage, post.updatedAt)) || null;
+  const keywords = seo?.keywords?.trim()
+    ? seo.keywords.split(",").map((k) => k.trim()).filter(Boolean)
+    : (post.tags ?? []).map((t) => t.name);
+  const canonical = seo?.canonicalUrl?.trim() || `/article/${post.slug}`;
 
   return {
-    title: post.title,
+    title: metaTitle,
     description,
-    keywords: tagNames.length ? tagNames : undefined,
-    alternates: { canonical: `/article/${post.slug}` },
+    keywords: keywords.length ? keywords : undefined,
+    alternates: { canonical },
+    ...(seo?.noIndex ? { robots: { index: false, follow: false } } : {}),
     openGraph: {
-      title: post.title,
+      title: metaTitle,
       description,
       type: "article",
       url: `/article/${post.slug}`,
@@ -45,7 +55,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     },
     twitter: {
       card: cover ? "summary_large_image" : "summary",
-      title: post.title,
+      title: metaTitle,
       description,
     },
   };
@@ -68,9 +78,9 @@ export default async function ArticlePage({ params }: Props) {
     <Container variant="measure" className="py-8 sm:py-10">
       <ArticleJsonLd
         slug={post.slug}
-        title={post.title}
-        description={excerpt(post.content ?? "", 160)}
-        image={gatherImageUrl(post.coverImage, post.updatedAt)}
+        title={post.seo?.title?.trim() || post.title}
+        description={post.seo?.description?.trim() || excerpt(post.content ?? "", 160)}
+        image={gatherImageUrl(post.seo?.ogImage?.trim() || post.coverImage, post.updatedAt)}
         authorName={post.author?.name ?? null}
         section={section?.label}
         datePublished={post.createdAt}
