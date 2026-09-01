@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, permanentRedirect } from "next/navigation";
 import { Container } from "@/components/ui/Container";
 import { ArticleHeader } from "@/components/news/ArticleHeader";
 import { ArticleBody } from "@/components/news/ArticleBody";
@@ -34,12 +34,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title: post.title,
     description,
     keywords: tagNames.length ? tagNames : undefined,
-    alternates: { canonical: `/article/${slug}` },
+    alternates: { canonical: `/article/${post.slug}` },
     openGraph: {
       title: post.title,
       description,
       type: "article",
-      url: `/article/${slug}`,
+      url: `/article/${post.slug}`,
       images: cover ? [{ url: cover }] : undefined,
     },
     twitter: {
@@ -54,6 +54,12 @@ export default async function ArticlePage({ params }: Props) {
   const { slug } = await params;
   const post = await getArticle(slug);
   if (!post) notFound();
+
+  // If the URL used an old slug, Gather resolved it to the current doc — send
+  // the reader (and search engines) on to the canonical URL with a 301.
+  if (post.slug !== slug) {
+    permanentRedirect(`/article/${post.slug}`);
+  }
 
   const section = primarySection(post);
 
