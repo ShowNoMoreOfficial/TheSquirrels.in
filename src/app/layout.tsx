@@ -5,6 +5,8 @@ import { Masthead } from "@/components/layout/Masthead";
 import { SectionNav } from "@/components/layout/SectionNav";
 import { Footer } from "@/components/layout/Footer";
 import { SITE_URL } from "@/lib/site";
+import { getSiteConfig } from "@/lib/site-config";
+import { GoogleAnalytics } from "@/components/seo/GoogleAnalytics";
 
 const playfair = Playfair_Display({
   variable: "--font-playfair",
@@ -37,11 +39,14 @@ export const metadata: Metadata = {
     "The Squirrels is an Indian news and analysis publication covering governance, policy, corporate affairs, politics and the economy.",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // GA Measurement ID comes from the CMS site config (CMS-managed per site).
+  const config = await getSiteConfig();
+
   return (
     <html
       lang="en"
@@ -52,6 +57,7 @@ export default function RootLayout({
         <SectionNav />
         <main className="flex-1 w-full">{children}</main>
         <Footer />
+        <GoogleAnalytics gaId={config?.gaMeasurementId} />
       </body>
     </html>
   );
