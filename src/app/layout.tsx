@@ -4,6 +4,7 @@ import "./globals.css";
 import { Masthead } from "@/components/layout/Masthead";
 import { SectionNav } from "@/components/layout/SectionNav";
 import { Footer } from "@/components/layout/Footer";
+import { OceanLoader } from "@/components/ads/OceanLoader";
 import { SITE_URL } from "@/lib/site";
 import { getSiteConfig } from "@/lib/site-config";
 import { GoogleAnalytics } from "@/components/seo/GoogleAnalytics";
@@ -58,6 +59,7 @@ export default async function RootLayout({
         <main className="flex-1 w-full">{children}</main>
         <Footer />
         <GoogleAnalytics gaId={config?.gaMeasurementId} />
+        <OceanLoader />
       </body>
     </html>
   );
