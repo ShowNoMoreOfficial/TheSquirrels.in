@@ -39,3 +39,10 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Internal business / HR / financial docs — never commit
+COST_SHEET.md
+OPEX_COST_SHEET_SHOWNOMORE.md
+KRA_FRAMEWORK_SHOWNOMORE.md
+INDIVIDUAL_KRAS_SHOWNOMORE.md
+*_SHOWNOMORE.md
