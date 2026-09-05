@@ -198,3 +198,61 @@ a {
   font-family: ui-monospace, "SF Mono", Menlo, monospace;
   font-size: 0.9em;
 }
+
+/* Syntax highlighting — highlight.js token spans injected by the Gather v1 API
+   (see content-transform in the CMS). The code box is dark, so a GitHub-dark
+   palette works. These classes only appear inside highlighted <code>. */
+.prose-news .hljs {
+  color: #e6edf3;
+}
+.prose-news .hljs-comment,
+.prose-news .hljs-quote {
+  color: #8b949e;
+  font-style: italic;
+}
+.prose-news .hljs-keyword,
+.prose-news .hljs-selector-tag,
+.prose-news .hljs-literal,
+.prose-news .hljs-type,
+.prose-news .hljs-doctag {
+  color: #ff7b72;
+}
+.prose-news .hljs-string,
+.prose-news .hljs-attr,
+.prose-news .hljs-regexp,
+.prose-news .hljs-addition {
+  color: #a5d6ff;
+}
+.prose-news .hljs-number,
+.prose-news .hljs-symbol,
+.prose-news .hljs-bullet,
+.prose-news .hljs-meta {
+  color: #79c0ff;
+}
+.prose-news .hljs-title,
+.prose-news .hljs-section,
+.prose-news .hljs-selector-id {
+  color: #d2a8ff;
+}
+.prose-news .hljs-name,
+.prose-news .hljs-tag,
+.prose-news .hljs-selector-class {
+  color: #7ee787;
+}
+.prose-news .hljs-built_in,
+.prose-news .hljs-variable,
+.prose-news .hljs-template-variable,
+.prose-news .hljs-property,
+.prose-news .hljs-params,
+.prose-news .hljs-attribute {
+  color: #ffa657;
+}
+.prose-news .hljs-deletion {
+  color: #ffa198;
+}
+.prose-news .hljs-emphasis {
+  font-style: italic;
+}
+.prose-news .hljs-strong {
+  font-weight: 600;
+}
