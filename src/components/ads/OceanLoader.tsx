@@ -1,42 +1,42 @@
 "use client";
 
 import Script from "next/script";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
 import { OCEAN_ENABLED, OCEAN_LOADER_URL } from "@/lib/ads/ocean";
 
+type OceanApi = {
+  refreshAll?: () => void;
+  refresh?: () => void;
+  render?: () => void;
+};
+
 /**
- * Loads Ocean's SDK once, and attempts a re-scan on client-side route changes.
+ * Loads Ocean's SDK once, and re-fills ad slots on client-side route changes.
  *
- * Ocean's SDK scans for `.ocean-ad` elements on initial load. Our site uses
- * client-side navigation, so newly-mounted ad slots on a new article won't be
- * picked up automatically — this effect best-effort calls a re-scan when the
- * pathname changes. The exact SDK API is TBD (per the Ocean handoff doc), so we
- * probe a few likely globals; if none exist, ads still render on hard loads.
+ * The SDK (`window.OceanAds`) auto-initializes on load and runs a
+ * MutationObserver, so it detects most dynamically-added `.ocean-ad` elements.
+ * As a belt-and-suspenders for Next's client-side navigation, we call the SDK's
+ * own `refreshAll()` on pathname changes — but NOT on the initial mount (the
+ * SDK handles that itself, and calling it there would double-request).
  */
 export function OceanLoader() {
   const pathname = usePathname();
+  const firstRun = useRef(true);
 
   useEffect(() => {
     if (!OCEAN_ENABLED) return;
-    // Probe for a re-scan/refresh hook the SDK may expose. Harmless if absent.
-    type OceanApi = {
-      scan?: () => void;
-      refresh?: () => void;
-      init?: () => void;
-    };
-    const w = window as unknown as Record<string, OceanApi | undefined>;
-    const candidates: Array<OceanApi | undefined> = [w.ocean, w.OceanAds];
-    for (const api of candidates) {
-      if (!api) continue;
-      const fn = api.scan ?? api.refresh ?? api.init;
-      if (typeof fn === "function") {
-        try {
-          fn.call(api);
-        } catch {
-          // ignore — non-fatal
-        }
-        break;
+    if (firstRun.current) {
+      firstRun.current = false; // initial fill is the SDK's own job
+      return;
+    }
+    const api = (window as unknown as { OceanAds?: OceanApi }).OceanAds;
+    const fn = api?.refreshAll ?? api?.refresh ?? api?.render;
+    if (typeof fn === "function") {
+      try {
+        fn.call(api);
+      } catch {
+        // non-fatal
       }
     }
   }, [pathname]);
