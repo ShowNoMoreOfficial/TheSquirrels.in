@@ -28,7 +28,12 @@ export function OceanAd({
   if (!OCEAN_ENABLED) return null;
 
   const [w, h] = size.split("x").map((n) => parseInt(n, 10));
-  const aspectRatio = w && h ? `${w} / ${h}` : undefined;
+  // Reserve roughly the expected height (limits layout shift before the SDK
+  // fills the slot) but DON'T lock a hard aspect ratio — the actual creative
+  // sizes itself (`height:auto`), so forcing 4:5 + overflow:hidden would clip
+  // or letterbox any creative that isn't exactly 1080×1350.
+  const reservedMinHeight =
+    w && h ? Math.round((h / w) * maxWidth) : undefined;
 
   return (
     <div className={className} style={{ maxWidth }}>
@@ -36,10 +41,10 @@ export function OceanAd({
         Advertisement
       </p>
       <div
-        className="ocean-ad mx-auto w-full overflow-hidden bg-hairline/40"
+        className="ocean-ad mx-auto w-full"
         data-oa-size={size}
         {...(position ? { "data-oa-position": position } : {})}
-        style={{ aspectRatio, maxWidth }}
+        style={{ maxWidth, minHeight: reservedMinHeight }}
       />
     </div>
   );
