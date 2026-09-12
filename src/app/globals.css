@@ -256,3 +256,25 @@ a {
 .prose-news .hljs-strong {
   font-weight: 600;
 }
+
+/*
+ * Ocean Ads — keep the injected creative inside the right-rail column.
+ * On fill, the SDK sets inline sizes on the slot/creative that can blow past
+ * our column. `!important` beats those inline styles; overflow clips anything
+ * that still tries to escape; descendants are forced to fit the rail width.
+ */
+.ocean-ad {
+  max-width: 300px !important;
+  margin-inline: auto;
+  overflow: hidden !important;
+}
+.ocean-ad * {
+  max-width: 100% !important;
+  box-sizing: border-box;
+}
+.ocean-ad img,
+.ocean-ad iframe,
+.ocean-ad video {
+  width: 100% !important;
+  height: auto !important;
+}
