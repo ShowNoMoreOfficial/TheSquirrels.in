@@ -1,3 +1,4 @@
+import type { CSSProperties } from "react";
 import { OCEAN_ENABLED } from "@/lib/ads/ocean";
 
 type OceanAdProps = {
@@ -28,12 +29,14 @@ export function OceanAd({
   if (!OCEAN_ENABLED) return null;
 
   const [w, h] = size.split("x").map((n) => parseInt(n, 10));
-  // Reserve roughly the expected height (limits layout shift before the SDK
-  // fills the slot) but DON'T lock a hard aspect ratio — the actual creative
-  // sizes itself (`height:auto`), so forcing 4:5 + overflow:hidden would clip
-  // or letterbox any creative that isn't exactly 1080×1350.
-  const reservedMinHeight =
-    w && h ? Math.round((h / w) * maxWidth) : undefined;
+  // Drive the fixed aspect-ratio box + max width via CSS vars, so the
+  // `!important` rules in globals.css can enforce them and scale the SDK's
+  // native-size creative down into the slot (see .ocean-ad there).
+  const slotStyle = {
+    maxWidth,
+    "--ocean-max": `${maxWidth}px`,
+    "--ocean-ar": w && h ? `${w} / ${h}` : "1 / 1",
+  } as CSSProperties;
 
   return (
     <div className={className} style={{ maxWidth }}>
@@ -44,7 +47,7 @@ export function OceanAd({
         className="ocean-ad mx-auto w-full"
         data-oa-size={size}
         {...(position ? { "data-oa-position": position } : {})}
-        style={{ maxWidth, minHeight: reservedMinHeight }}
+        style={slotStyle}
       />
     </div>
   );

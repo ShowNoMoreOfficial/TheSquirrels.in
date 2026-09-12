@@ -264,17 +264,29 @@ a {
  * that still tries to escape; descendants are forced to fit the rail width.
  */
 .ocean-ad {
-  max-width: 300px !important;
+  max-width: var(--ocean-max, 300px) !important;
+  aspect-ratio: var(--ocean-ar, 1080 / 1350) !important;
   margin-inline: auto;
   overflow: hidden !important;
 }
-.ocean-ad * {
+/*
+ * The SDK injects nested wrappers and a creative frame at the creative's
+ * NATIVE pixel size (e.g. 1080×1350), which blew the rail out and ran 1350px
+ * tall (breaking sticky + making the click layer cover blank space). Force the
+ * whole injected subtree to fill our fixed aspect-ratio box so it scales down
+ * to the slot and the click area matches the visible ad.
+ */
+.ocean-ad > *,
+.ocean-ad-container,
+.ocean-ad-container > * {
+  width: 100% !important;
+  height: 100% !important;
   max-width: 100% !important;
+  min-height: 0 !important;
+  aspect-ratio: auto !important;
   box-sizing: border-box;
 }
 .ocean-ad img,
-.ocean-ad iframe,
 .ocean-ad video {
-  width: 100% !important;
-  height: auto !important;
+  object-fit: cover;
 }

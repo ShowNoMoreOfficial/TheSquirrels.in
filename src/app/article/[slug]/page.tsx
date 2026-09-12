@@ -111,6 +111,17 @@ export default async function ArticlePage({ params }: Props) {
               date={post.createdAt}
               coverImage={gatherImageUrl(post.coverImage, post.updatedAt)}
             />
+            {/* Mobile / tablet in-content ad — the right rail is hidden below lg,
+                so surface the ad in the article flow instead. */}
+            {OCEAN_ENABLED && (
+              <div className="my-8 lg:hidden">
+                <OceanAd
+                  size="1080x1350"
+                  position="sq-mobile-incontent"
+                  maxWidth={320}
+                />
+              </div>
+            )}
             <ArticleBody html={post.content ?? ""} />
           </article>
         </div>
