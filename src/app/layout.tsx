@@ -4,8 +4,10 @@ import "./globals.css";
 import { Masthead } from "@/components/layout/Masthead";
 import { SectionNav } from "@/components/layout/SectionNav";
 import { Footer } from "@/components/layout/Footer";
+import Script from "next/script";
 import { OceanLoader } from "@/components/ads/OceanLoader";
 import { AdSense } from "@/components/ads/AdSense";
+import { OCEAN_ENABLED } from "@/lib/ads/ocean";
 import { SITE_URL } from "@/lib/site";
 import { getSiteConfig } from "@/lib/site-config";
 import { GoogleAnalytics } from "@/components/seo/GoogleAnalytics";
@@ -55,6 +57,13 @@ export default async function RootLayout({
       className={`${playfair.variable} ${lora.variable} ${libreFranklin.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-paper text-ink">
+        {OCEAN_ENABLED && (
+          <Script
+            id="ocean-config-fix"
+            src="/ocean-config-fix.js"
+            strategy="beforeInteractive"
+          />
+        )}
         <Masthead />
         <SectionNav />
         <main className="flex-1 w-full">{children}</main>
