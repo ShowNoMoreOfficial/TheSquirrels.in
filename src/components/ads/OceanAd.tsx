@@ -39,7 +39,7 @@ export function OceanAd({
   } as CSSProperties;
 
   return (
-    <div className={className} style={{ maxWidth }}>
+    <div className={`mx-auto ${className}`.trim()} style={{ maxWidth }}>
       <p className="label mb-1 text-center text-[10px] text-ink-faint">
         Advertisement
       </p>
